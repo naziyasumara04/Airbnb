@@ -7,14 +7,14 @@
 </head>
 <body>
     <h1>Edit listing</h1>
-    <form>
+    <form method="post" action="/listings/<%=listing._id%>?_method=put">
         <input type="text" name="listing[title]" value="<%=listing.title%>">
         <br><br>
-        <textarea type="text" name="listing[description]" value="<%=listing.description%>"></textarea>
+        <textarea type="text" name="listing[description]"><%=listing.description%></textarea>
         <br><br>
         <input name="listing[image]" value="<%=listing.image%>" type="text">
         <br><br>
-        <input type="number" name="listing[price]" value="<%=listing.number%>">
+        <input type="number" name="listing[price]" value="<%=listing.price%>">
         <br><br>
         <input type="text" name="listing[location]" value="<%=listing.location%>">
         <br><br>
