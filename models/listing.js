@@ -11,12 +11,12 @@ const listingSchema=new Schema({
     },
     image:{
         type:String,
-        // default:"https://unsplash.com/photos/an-underwater-view-of-a-colorful-coral-reef-HYHYGLs-Rp8",
-        // set:(v)=>
-        // v===" "?"https://unsplash.com/photos/an-underwater-view-of-a-colorful-coral-reef-HYHYGLs-Rp8"
-        // :v,
-        // filename:String,
-        // url:String
+        default:"https://unsplash.com/photos/an-underwater-view-of-a-colorful-coral-reef-HYHYGLs-Rp8",
+        set:(v)=>
+        v===" "?"https://unsplash.com/photos/an-underwater-view-of-a-colorful-coral-reef-HYHYGLs-Rp8"
+        :v,
+        filename:String,
+        url:String
 
     },
     price:{
