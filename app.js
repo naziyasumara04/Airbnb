@@ -72,12 +72,25 @@ app.get("/listings/:id", wrapAsync(async (req, res) => {
 app.post("/listings",validatelisting,wrapAsync(async(req,res,next)=>{
    
    
-    let newlisting = new Listing(req.body.listing);
+    // let newlisting = new Listing(req.body.listing);
     
-    await newlisting.save();
+    // await newlisting.save();
+    // res.redirect("/listings");
+    let {title, description, image, price, country, location} = req.body.listing;
+    const sampleListings = new Listing({
+        title:title,
+        description:description,
+        location:location,
+        country:country,
+        price:price,
+    });
+    sampleListings.image.url = image;
+    await sampleListings.save();
+    console.log(sampleListings);
     res.redirect("/listings");
-   
   }));
+   
+  
 //edit route:
 app.get("/listings/:id/edit",wrapAsync(async(req,res)=>{
     let {id}=req.params;
