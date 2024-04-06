@@ -31,13 +31,16 @@ main()
 async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
 }
+
 function validatelisting(req,res,next){
     let {error}=listingSchema.validate(req.body);
     console.log(error);
     if(error){
-        let errMsg=error.details.map((el)=>el.message.join(","));
-        throw new ExpressError(400,errMsg);
+        let errMsg=error.details.map((el)=>el.message).join(",");
+        let err=new ExpressError(errMsg,400);
+        return next(err);
     }
+    next();
 }
 
 app.get("/", (req, res) => {
@@ -125,8 +128,8 @@ app.all("*",(req,res,next)=>{
 
 app.use((err,req,res,next)=>{
     let{status=500,message="something went Wrong"}=err;
-    // res.status(status).send(message);
-    res.render("error.ejs",{message});
+    res.status(status).send(message);
+    res.render("error.ejs",{message,status});
 });
 
 app.listen(port, () => {
