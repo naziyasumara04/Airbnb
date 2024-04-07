@@ -77,16 +77,16 @@ app.post("/listings",validatelisting,wrapAsync(async(req,res,next)=>{
     // await newlisting.save();
     // res.redirect("/listings");
     let {title, description, image, price, country, location} = req.body.listing;
-    const sampleListings = new Listing({
+    const newListing = new Listing({
         title:title,
         description:description,
         location:location,
         country:country,
         price:price,
     });
-    sampleListings.image.url = image;
-    await sampleListings.save();
-    console.log(sampleListings);
+    newListing.image.url = image;
+    await newListing.save();
+    console.log(newListing);
     res.redirect("/listings");
   }));
    
