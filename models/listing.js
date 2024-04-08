@@ -9,13 +9,14 @@ const listingSchema = new Schema({
         type: String,
     },
     image: {
-        filename: String,
-        url: String,
-        // set:(v)=>
-        // v===""
-        // ?"https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHRyYXZlbHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60"
-        // :v,
+            filename: String,
+            url: {
+                type:String,
+                default:"https://images.unsplash.com/photo-1506126279646-a697353d3166?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixid=MnwxfDB8MXxyYW5kb218MHx8aG9tZXx8fHx8fDE3MTI1NTQwMTM&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1600",
+                set:(v)=> v === ""?"https://images.unsplash.com/photo-1506126279646-a697353d3166?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixid=MnwxfDB8MXxyYW5kb218MHx8aG9tZXx8fHx8fDE3MTI1NTQwMTM&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1600":v,
+            }
     },
+
     price: {
         type: Number,
     },
