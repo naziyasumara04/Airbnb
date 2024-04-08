@@ -96,17 +96,37 @@ app.get("/listings/:id/edit",wrapAsync(async(req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id);
     res.render("listings/edit.ejs",{listing});
-
 }));
+
 //update route:
 app.put("/listings/:id",validatelisting,wrapAsync(async(req,res)=>{
     if(!req.body.listing){
         throw new ExpressError(400,"Enter valid information");
     }
-  let {id}=req.params;
-  await Listing.findByIdAndUpdate(id,{...req.body.listing});
-  res.redirect(`/listings/${id}`);
-}));
+//   let {id}=req.params;
+//   let {title, image, description, location, country, price}  = req.body.listing;
+
+//   await Listing.findByIdAndUpdate(id,{...req.body.listing});
+//   res.redirect(`/listings/${id}`);
+
+//new one:
+//   app.put("/:id", wrapAsync(async (req, res, next) => {
+    let {id} = req.params;
+    let {title, image, description, location, country, price}  = req.body.listing;
+    
+    let newL = await Listing.findByIdAndUpdate(id, {
+        title:title,
+        description:description,
+        location:location,
+        country:country,
+        price:price,
+        'image.url' :image
+    }, {new:true});
+    console.log(newL);
+    res.redirect(`/listings/${id}`);
+    })
+);
+// }));
 //delete route:
 
 app.delete("/listings/:id",wrapAsync(async(req,res)=>{
