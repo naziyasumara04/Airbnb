@@ -104,7 +104,7 @@ app.put("/listings/:id",validatelisting,wrapAsync(async(req,res)=>{
         throw new ExpressError(400,"Enter valid information");
     }
 //   let {id}=req.params;
-//   let {title, image, description, location, country, price}  = req.body.listing;
+
 
 //   await Listing.findByIdAndUpdate(id,{...req.body.listing});
 //   res.redirect(`/listings/${id}`);
@@ -123,6 +123,7 @@ app.put("/listings/:id",validatelisting,wrapAsync(async(req,res)=>{
         'image.url' :image
     }, {new:true});
     console.log(newL);
+    // await newL.save();
     res.redirect(`/listings/${id}`);
     })
 );
