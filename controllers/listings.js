@@ -28,6 +28,9 @@ module.exports.showListing=async (req, res) => {
 };
 
 module.exports.createListing=async(req,res,next)=>{
+    let url=req.file.path;
+    let filename=req.file.filename;
+    // console.log(url,"...",filename);
     let {title, description, image, price, country, location} = req.body.listing;
     const newListing = new Listing({
         title:title,
@@ -38,7 +41,11 @@ module.exports.createListing=async(req,res,next)=>{
     });
     newListing.image.url = image;
     console.log(req.user);
+
+    newListing.image={filename,url};
     newListing.owner=req.user._id;
+
+    
     await newListing.save();
 
     req.flash("success","new listing created");
@@ -63,7 +70,7 @@ module.exports.updateListing=async(req,res)=>{
     }
     let {id} = req.params;
     let {title, image, description, location, country, price}  = req.body.listing;    
-    let newL = await Listing.findByIdAndUpdate(id, {
+    let listing = await Listing.findByIdAndUpdate(id, {
         title:title,
         description:description,
         location:location,
@@ -71,10 +78,18 @@ module.exports.updateListing=async(req,res)=>{
         price:price,
         'image.url' :image
     }, {new:true});
-    console.log(newL);
+    console.log(listing);
+    
+    if(typeof req.file != "undefined"){
+    let url=req.file.path;
+    let filename=req.file.filename;
+    listing.image={filename,url};
+    await listing.save();
+    }
+
     req.flash("success","Listing Updated!");
     res.redirect(`/listings/${id}`);
-    }
+};
 
 
     module.exports.destroyListing=async(req,res)=>{

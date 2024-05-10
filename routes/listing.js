@@ -7,25 +7,33 @@ const {listingSchema}=require("../schema.js");
 const {isLoggedIn,isOwner,validatelisting}=require("../middleware.js");
 const listingController=require("../controllers/listings.js");
 
+const multer  = require('multer');
+
+const {storage}=require("../cloudConfig.js");
+const upload = multer({storage});
+
 
 //index route & //create route:
 router
 .route("/")
 .get(wrapAsync(listingController.index))
-.post(isLoggedIn,validatelisting,wrapAsync(listingController.createListing));
+.post(isLoggedIn,upload.single('listing[image]'),validatelisting,wrapAsync(listingController.createListing));
+// .post(, (req,res)=>{
+// res.send(req.file);
+// });
 
 //new route:
 router.get("/new",isLoggedIn,listingController.renderNewForm);
 
 // show route & edit route & update route & delete route:
 router
-.route(":/id")
+.route("/:id")
 .get(wrapAsync(listingController.showListing))
 .put(isLoggedIn,
 isOwner,
+upload.single["listing[image]"],
 validatelisting,
-wrapAsync(listingController.updateListing)
-)
+wrapAsync(listingController.updateListing))
 .delete(isLoggedIn,
 isOwner,
 wrapAsync(listingController.destroyListing));
