@@ -1,8 +1,14 @@
 const Listing = require("../models/listing.js");
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapToken=process.env.MAP_TOKEN;
+
+const  geocodingClient= mbxGeocoding({ accessToken: mapToken });
+
 module.exports.index=async (req, res) => {
     let alllistings = await Listing.find({});
     res.render("listings/index.ejs", { alllistings });
 }
+
 
 module.exports.renderNewForm=async(req,res)=>{
     // console.log(req.user);
@@ -28,6 +34,16 @@ module.exports.showListing=async (req, res) => {
 };
 
 module.exports.createListing=async(req,res,next)=>{
+    let response=await geocodingClient.forwardGeocode({
+        // query: req.body.listing.location,
+        query:req.body.listing.location,
+        limit: 1
+      })
+        .send();
+        
+        // console.log();
+
+
     let url=req.file.path;
     let filename=req.file.filename;
     // console.log(url,"...",filename);
@@ -45,8 +61,11 @@ module.exports.createListing=async(req,res,next)=>{
     newListing.image={filename,url};
     newListing.owner=req.user._id;
 
+    newListing.geometry=response.body.features[0].geometry;
+
     
-    await newListing.save();
+    let savedListing=await newListing.save();
+    console.log(savedListing);
 
     req.flash("success","new listing created");
     console.log(newListing);
@@ -60,8 +79,11 @@ module.exports.createListing=async(req,res,next)=>{
         req.flash("error","Listing which you requested for is not exists");
         res.redirect("/listings");
     }
+
+    let originalImageUrl=listing.image.url;
+    originalImageUrl=originalImageUrl.replace("/upload","/upload/w_250");
     // req.flash("success","Listing reated");
-    res.render("listings/edit.ejs",{listing});
+    res.render("listings/edit.ejs",{listing,originalImageUrl});
 }
 
 module.exports.updateListing=async(req,res)=>{

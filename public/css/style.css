@@ -100,3 +100,10 @@ background-color:white
     padding-left:0;
     padding-right: 0;
 }
+
+/* map */
+
+#map{
+    height:200px;
+    width:80vh;
+}
